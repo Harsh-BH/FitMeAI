@@ -1,0 +1,41 @@
+name: CI/CD pipeline
+
+on:
+ push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      runs:
+        working-directory: devops
+
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to Docker Hub
+      if: secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != ''
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Run Docker Compose (Build + Start)
+      run: |
+        echo "Starting build..."
+        docker-compose -f devops/docker-compose.yml up --build -d
+        echo "Build complete!"
+
+    - name: Done
+      run: echo "Compose ran successfully!"
