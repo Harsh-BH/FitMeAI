@@ -136,7 +136,7 @@ Feel free to reach out for questions, ideas, or collaborations:
 🤝 Collaboration
 
 We welcome contributions from developers, designers, and AI researchers.
-Please see [COLLABORATION.md](Collaboration) for details on how to get started.
+Please see [COLLABORATION.md](Collaboration.md) for details on how to get started.
 
 ---
 
