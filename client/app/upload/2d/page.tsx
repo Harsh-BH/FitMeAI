@@ -6,35 +6,25 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileUpload } from "@/components/ui/file-upload";
-import { ArrowRight, RotateCw } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { ArrowRight, RotateCw, Download } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { useTryOn } from "@/hooks/use-try-on";
 
 export default function Upload2DPage() {
-  const { toast } = useToast();
   const [userImage, setUserImage] = useState<File | null>(null);
   const [clothingImage, setClothingImage] = useState<File | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("upload");
+  const { submit2DTryOn, isLoading, result, progress } = useTryOn();
 
-  const handleGenerate = () => {
-    if (!userImage || !clothingImage) {
-      toast({
-        title: "Missing images",
-        description: "Please upload both your photo and a clothing item.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsGenerating(true);
+  const handleGenerate = async () => {
+    if (!userImage || !clothingImage) return;
     
-    // Simulate processing time
-    setTimeout(() => {
-      setIsGenerating(false);
-      toast({
-        title: "Generation complete!",
-        description: "Your 2D virtual try-on has been generated successfully.",
-      });
-    }, 3000);
+    const response = await submit2DTryOn(userImage, clothingImage);
+    
+    if (response?.success) {
+      // Switch to result tab after processing starts
+      setActiveTab("result");
+    }
   };
 
   return (
@@ -57,7 +47,7 @@ export default function Upload2DPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="upload" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-2 mb-8">
                 <TabsTrigger value="upload">Upload Images</TabsTrigger>
                 <TabsTrigger value="result">View Result</TabsTrigger>
@@ -92,29 +82,78 @@ export default function Upload2DPage() {
               </TabsContent>
               
               <TabsContent value="result">
-                <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-lg">
-                  <div className="text-center">
-                    <p className="text-muted-foreground mb-4">
-                      Results will appear here after generation
+                {isLoading && (
+                  <div className="mb-6 space-y-4">
+                    <p className="text-center font-medium">
+                      Generating your virtual try-on...
                     </p>
-                    <Button variant="outline" onClick={() => {}}>
-                      View in Fullscreen
-                    </Button>
+                    <Progress value={progress} className="h-2" />
+                    <p className="text-center text-sm text-muted-foreground">
+                      This may take a few moments
+                    </p>
                   </div>
+                )}
+                
+                <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-lg">
+                  {result?.success && result.resultPreviewUrl ? (
+                    <div className="w-full max-w-md">
+                      <div className="relative aspect-[3/4] w-full">
+                        <img 
+                          src={result.resultPreviewUrl} 
+                          alt="Virtual try-on result" 
+                          className="w-full h-full object-contain rounded-lg"
+                        />
+                      </div>
+                      <div className="mt-4 flex justify-center">
+                        <Button
+                          variant="outline"
+                          onClick={() => window.open(result.resultPreviewUrl, '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <Download className="h-4 w-4" />
+                          Save Image
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <p className="text-muted-foreground mb-4">
+                        {isLoading 
+                          ? "Processing your images..."
+                          : "Results will appear here after generation"
+                        }
+                      </p>
+                      {!isLoading && (
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setActiveTab("upload")}
+                        >
+                          Return to Upload
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={() => {}}>
-              Save for Later
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setUserImage(null);
+                setClothingImage(null);
+              }}
+              disabled={isLoading}
+            >
+              Clear Images
             </Button>
             <Button 
               onClick={handleGenerate}
-              disabled={!userImage || !clothingImage || isGenerating}
+              disabled={!userImage || !clothingImage || isLoading}
               className="min-w-[150px]"
             >
-              {isGenerating ? (
+              {isLoading ? (
                 <>
                   <RotateCw className="mr-2 h-4 w-4 animate-spin" />
                   Generating...
