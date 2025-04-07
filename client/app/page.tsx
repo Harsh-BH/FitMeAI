@@ -16,7 +16,9 @@ import {
   Users,
   Sparkles,
   Zap,
-  ShoppingBag
+  ShoppingBag,
+  LogIn,
+  User
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useRef, useState, useEffect } from "react";
@@ -79,9 +81,12 @@ export default function Home() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   const [mounted, setMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Authentication state
+  const [user, setUser] = useState({ name: "John Doe", avatar: "/avatar-placeholder.jpg" }); // Mock user data
   
   useEffect(() => {
     setMounted(true);
+    // Here you would typically check if user is logged in via auth provider
   }, []);
 
   return (
@@ -91,8 +96,44 @@ export default function Home() {
         {mounted && <ClothingSVGs />}
       </div>
       
-      {/* Theme Toggle Button */}
-      <div className="fixed top-5 right-5 z-50">
+      {/* Authentication and Theme Toggle Buttons */}
+      <div className="fixed top-5 right-5 z-50 flex items-center gap-3">
+        {isLoggedIn ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center gap-2 bg-white/20 dark:bg-black/20 backdrop-blur-md py-2 px-3 rounded-full cursor-pointer hover:bg-white/30 dark:hover:bg-black/30 transition-all border border-white/10 dark:border-gray-800"
+            onClick={() => setIsLoggedIn(false)} // This would open a dropdown menu in a real app
+          >
+            <span className="text-sm font-medium mr-1">{user.name}</span>
+            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/20 dark:border-gray-700">
+              <Image 
+                src={user.avatar} 
+                alt="User avatar" 
+                width={32} 
+                height={32} 
+                className="object-cover"
+              />
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <Button 
+              asChild 
+              variant="outline" 
+              size="sm" 
+              className="rounded-full bg-white/20 dark:bg-black/20 backdrop-blur-md border-white/10 dark:border-gray-800 hover:bg-white/30 dark:hover:bg-black/30"
+            >
+              <Link href="/signup">
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </Link>
+            </Button>
+          </motion.div>
+        )}
         <ThemeToggle />
       </div>
       
