@@ -1,5 +1,5 @@
 
-```markdown
+
 # 👗 FitMeAI
 
 **FitMeAI** is an AI-powered Virtual Try-On web application that enables users to try on clothes digitally using uploaded images or their webcam. It leverages the power of computer vision, pose detection, and generative AI to deliver realistic try-on experiences.
@@ -133,6 +133,3 @@ Feel free to reach out for questions, ideas, or collaborations:
 
 > **FitMeAI** — Redefining the way we try, style, and shop.
 
-```
-
----
