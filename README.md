@@ -35,14 +35,14 @@
 
 ## 🧠 Tech Stack
 
-| Layer        | Technology Used                         |
-|--------------|------------------------------------------|
-| **Frontend** | React.js / Next.js, Tailwind CSS         |
-| **Backend**  | Python (FastAPI or Flask)                |
+| Layer        | Technology Used                                 |
+|--------------|-------------------------------------------------|
+| **Frontend** | React.js / Next.js, Tailwind CSS                |
+| **Backend**  | Python (FastAPI)                                |
 | **AI/ML**    | MediaPipe, OpenCV, ControlNet, Stable Diffusion |
-| **Storage**  | Firebase / AWS S3                        |
-| **Auth**     | Firebase Auth / Supabase                 |
-| **Database** | MongoDB / PostgreSQL                     |
+| **Storage**  | Firebase / AWS S3                               |
+| **Auth**     | Firebase /  Next-Auth                           |
+| **Database** | MongoDB / PostgreSQL                            |
 
 ---
 
@@ -50,9 +50,9 @@
 
 ```
 FitMeAI/
-├── frontend/         # React / Next.js app
-├── backend/          # FastAPI / Flask backend
-├── models/           # AI models and scripts
+├── client/         # React / Next.js app
+├── server/          # FastAPI / Flask backend
+├── devops/           # AI models and scripts
 ├── public/           # Assets like clothes, icons
 ├── examples/         # Sample user photos & outputs
 └── README.md
@@ -72,7 +72,7 @@ cd FitMeAI
 ### 2. Setup Frontend
 
 ```bash
-cd frontend
+cd client
 npm install
 npm run dev
 ```
@@ -80,7 +80,7 @@ npm run dev
 ### 3. Setup Backend
 
 ```bash
-cd backend
+cd server
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
@@ -112,7 +112,7 @@ For realistic generation, use ControlNet + Stable Diffusion with a body-pose-con
 
 ## 🧑‍💻 Authors
 
-- [Your Name](https://github.com/yourusername) – Full Stack / AI Developer
+- [Harsh Bhatt](https://github.com/Harsh-BH) – Full Stack / AI Developer
 
 ---
 
@@ -126,8 +126,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Feel free to reach out for questions, ideas, or collaborations:
 
-- Email: `your.email@example.com`
-- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+- Email: `harsh.aby.007@gmail.com`
+- LinkedIn: [linkedin.com/in/Harsh](https://www.linkedin.com/in/harsh-bhatt-114a2a293/)
+
+---
+
+---
+
+🤝 Collaboration
+
+We welcome contributions from developers, designers, and AI researchers.
+Please see [COLLABORATION.md](Collaboration) for details on how to get started.
 
 ---
 
